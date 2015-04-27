@@ -37,11 +37,8 @@ rm(foo, i, data, trees, regime.data)
 library(phytools)
 mapped.trees1 <- make.simmap(new.trees, wing.data, maxit=200000, model = "SYM", nsim = 5, pi = c(1, 0))
 #mapped.trees2 <- make.simmap(new.trees, wing.data, maxit=200000, model = "ARD", nsim = 5, pi = c(1, 0))
-chrom.num <- as.numeric(data[, 2])
-names(chrom.num) <- row.names(wing.data)
 
 ##### lets compare the sym and ard model #####
-
 #sym.log <- vector()
 #for(i in 1:500){
 #  sym.log[i] <- foo1[[i]]$logL
@@ -54,10 +51,15 @@ names(chrom.num) <- row.names(wing.data)
 #1-pchisq((2*(-mean(sym.log) + mean(ard.log))), 1)
 ##### no support for the ard model #####
 
+# get chromosome number data into a vector for brownielite
+chrom.num <- as.numeric(chrom.data[, 2])
+names(chrom.num) <- row.names(wing.data)
+
+rm(chrom.data)
 
 result <- list()
 for(i in 1:500){
-  result[[i]] <- brownie.lite(foo1[[i]], chrom.num, maxit=200000, test="chisq", se=NULL)
+  result[[i]] <- brownie.lite(mapped.trees1[[i]], chrom.num, maxit=200000, test="chisq", se=NULL)
   print(i)
 }
 
@@ -83,7 +85,7 @@ for(i in 1:500){
 plot(winged, pch=19, col="blue", ylim=c(0,60))
 points(wingless, pch=19, col="red")
 results2 <- cbind(winged,wingless)
-write.csv(results2, file="bm.rates.csv")
+write.csv(results2, file="../results/wing.bm.rates.csv", row.names=F)
 
 
 
