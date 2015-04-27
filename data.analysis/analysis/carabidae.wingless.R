@@ -1,7 +1,7 @@
-# read in the data
 data <- read.csv("../data/carab.wingless.csv", as.is=T)
 
-# add row names
+# remove NA data & add row names
+data <- data[!is.na(data[, 3]), ]
 row.names(data) <- data[, 1]
 
 # read the tree
@@ -13,10 +13,10 @@ library(geiger)
 foo <- treedata(trees[[1]], data)
 data <- foo[[2]]
 regime.data <- data[, c(3,4)]
-sim.data <- cbind(as.numeric(regime.data[,1]), as.numeric(regime.data[,2]))
-row.names(sim.data) <- row.names(regime.data)
-sim.data <- as.matrix(sim.data)
-colnames(sim.data) <- c("winged", "wingless")
+wing.data <- cbind(as.numeric(regime.data[,1]), as.numeric(regime.data[,2]))
+row.names(wing.data) <- row.names(regime.data)
+wing.data <- as.matrix(wing.data)
+colnames(wing.data) <- c("winged", "wingless")
 
 # now lets do a multiphylo object as well
 new.trees <- vector("list", length=100)
@@ -25,16 +25,20 @@ for(i in 1:100){
 }
 class(new.trees) <- "multiPhylo"
 
+# lets make names clear
+chrom.data <- data
+
 # now clean up
-rm(foo, i, trees, regime.data)
+
+rm(foo, i, data, trees, regime.data)
 
 
 # do the ancestral state reconstructions
 library(phytools)
-foo1 <- make.simmap(new.trees, sim.data, maxit=200000, model = "SYM", nsim = 5, pi = c(1, 0))
-#foo2 <- make.simmap(new.trees, sim.data, maxit=200000, model = "ARD", nsim = 5, pi = c(1, 0))
+mapped.trees1 <- make.simmap(new.trees, wing.data, maxit=200000, model = "SYM", nsim = 5, pi = c(1, 0))
+#mapped.trees2 <- make.simmap(new.trees, wing.data, maxit=200000, model = "ARD", nsim = 5, pi = c(1, 0))
 chrom.num <- as.numeric(data[, 2])
-names(chrom.num) <- row.names(sim.data)
+names(chrom.num) <- row.names(wing.data)
 
 ##### lets compare the sym and ard model #####
 
