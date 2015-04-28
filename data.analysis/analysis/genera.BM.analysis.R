@@ -1,4 +1,9 @@
-## This script will fit a BM model to the evoltuion of chromosome number in each group
+## This script will fit a BM model to the evoltuion of chromosome number in
+## each genera being studied.  The full fit object is returned to be used in
+## conjunction with arbutrus
+## Heath Blackmon
+## 28 April 2015
+## coleoguy@gmail.com
 library(geiger)
 taxa   <- c('Bembidion', 'Calathus', 'Chrysolina', 
             'Cicindela', 'Cytronus', 'Dendroctonus', 
