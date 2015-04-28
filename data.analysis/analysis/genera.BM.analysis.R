@@ -18,6 +18,7 @@ for(j in 1:length(taxa)){
                          sep = ""))
   chrom <- as.numeric(data[,2])
   names(chrom) <- data[,1]
+  chrom2 <- chrom ## a duplicate for sorting for arbutus
   print(taxa[j])
   group.results <- list()
   for(i in 1:100){
@@ -29,6 +30,10 @@ for(j in 1:length(taxa)){
                             i,
                             ".tree", 
                             sep=""))
+    for(k in 1:length(tree$tip.label)){
+      chrom2[k] <- chrom[which(names(chrom) == tree$tip.label[k])]
+      names(chrom2)[k] <- names(chrom)[which(names(chrom) == tree$tip.label[k])]
+    }
     group.results[[i]] <- fitContinuous(phy=tree, 
                             dat=chrom, 
                             model="BM")
