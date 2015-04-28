@@ -35,7 +35,7 @@ for(j in 1:length(taxa)){
       names(chrom2)[k] <- names(chrom)[which(names(chrom) == tree$tip.label[k])]
     }
     group.results[[i]] <- fitContinuous(phy=tree, 
-                            dat=chrom, 
+                            dat=chrom2, 
                             model="BM")
   }
   results[[j]] <- group.results
